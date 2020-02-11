@@ -1,0 +1,2 @@
+DISTFILES += \
+    $$PWD/Main.qml
