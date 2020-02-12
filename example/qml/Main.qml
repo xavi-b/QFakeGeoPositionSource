@@ -9,13 +9,15 @@ ApplicationWindow {
     height: 640
     visible: true
 
+    property var portname: "/dev/pts/2"
+
     PositionSource {
         id: src
         updateInterval: 500
         active: false
         name: "fake"
 
-        PluginParameter { name: "portname"; value: "/dev/pts/2" }
+        PluginParameter { name: "portname"; value: portname }
 
         Component.onCompleted: {
             console.log("PositionSource ready");
@@ -41,14 +43,7 @@ ApplicationWindow {
         anchors.fill: parent
 
         header: ToolBar {
-            Button {
-                id: startBtn
-                anchors.left: parent.left
-                text: "Button"
-                onClicked: {
 
-                }
-            }
         }
 
         Map {
