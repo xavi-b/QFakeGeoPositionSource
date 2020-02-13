@@ -1,5 +1,5 @@
 # QFakeGeoPositionSource
-Qt/QML plugin and tools to fake on Linux a GPS device to be used by Qt/QML
+Qt/QML plugin and tools to fake, on Linux, a GPS device to be used by Qt/QML
 
 
 ## Description
@@ -31,6 +31,7 @@ Just run it after fakesource is perfectly running !
 ## License
 
 LGPL-3.0
+
 See LICENSE file for more informations.
 
 ## Credits
