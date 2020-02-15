@@ -40,5 +40,5 @@ void PositionWriter::writeCoordinates(double lat, double lon)
             qDebug() << "Error opening new pseudo serial";
 
     qDebug() << "Writing" << lat << lon;
-    this->serial.write((QString::number(lat)+"|"+QString::number(lon)).toUtf8());
+    this->serial.write((QString::number(lat, 'g', 16)+"|"+QString::number(lon, 'g', 16)).toUtf8());
 }
