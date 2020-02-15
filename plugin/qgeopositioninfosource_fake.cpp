@@ -105,7 +105,7 @@ void QGeoPositionInfoSourceFake::setError(QGeoPositionInfoSource::Error error)
 void QGeoPositionInfoSourceFake::handleNewLocation()
 {
     QString data = this->m_slave.readAll();
-    qDebug() << "Received: " << data;
+    qCDebug(lcPositioningFake) << "Received: " << data;
     QStringList c = data.split('|');
 
     if(c.size() != 2)
