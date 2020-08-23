@@ -83,7 +83,7 @@ ApplicationWindow {
 
         Timer {
             id: timer
-            interval: 100
+            interval: 1000
             running: false
             repeat: true
 
@@ -93,7 +93,7 @@ ApplicationWindow {
             onTriggered: {
                 if (routeModel.count > 0) {
                     if(modelIndex + 1 > routeModel.get(0).segments.length) {
-                        timer.stop();
+                        //timer.stop();
                         modelIndex = 0;
                         pathIndex = 0;
                         return;
