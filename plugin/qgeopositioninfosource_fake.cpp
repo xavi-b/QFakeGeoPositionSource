@@ -108,7 +108,7 @@ void QGeoPositionInfoSourceFake::handleNewLocation()
     qCDebug(lcPositioningFake) << "Received: " << data;
     QStringList c = data.split('|');
 
-    if(c.size() != 2)
+    if(c.size() < 2)
         return;
 
     double lat = c[0].toDouble();
