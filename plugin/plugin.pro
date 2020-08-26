@@ -1,6 +1,6 @@
 TARGET = $$PWD/../qtposition_fake
 
-QT = core positioning serialport
+QT = core positioning network
 
 HEADERS += \
     qgeopositioninfosource_fake_p.h \

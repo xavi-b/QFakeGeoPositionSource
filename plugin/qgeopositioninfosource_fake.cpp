@@ -12,7 +12,7 @@ QGeoPositionInfoSourceFake::QGeoPositionInfoSourceFake(QObject *parent)
 
 QGeoPositionInfoSourceFake::~QGeoPositionInfoSourceFake()
 {
-    this->m_slave.close();
+
 }
 
 void QGeoPositionInfoSourceFake::setUpdateInterval(int msec)
@@ -49,51 +49,38 @@ QGeoPositionInfoSource::Error QGeoPositionInfoSourceFake::error() const
 
 void QGeoPositionInfoSourceFake::startUpdates()
 {
-    if(this->m_slave.isOpen())
+    if(this->m_socket.isOpen())
     {
         qCDebug(lcPositioningFake) << "The slave port is already opened";
         return;
     }
 
-    qCDebug(lcPositioningFake) << "Trying to open the slave port:" << this->m_slave.portName();
+    this->m_socket.connectToHost(host, port, QIODevice::ReadOnly);
 
-    if(!this->m_slave.open(QSerialPort::ReadOnly))
+    if(!this->m_socket.waitForConnected())
     {
-        qCDebug(lcPositioningFake) << "The slave port was not opened" << this->m_slave.errorString();
+        qCDebug(lcPositioningFake) << "The slave port has not connected" << this->m_socket.errorString();
         this->setError(QGeoPositionInfoSource::AccessError);
         return;
     }
 
     qCDebug(lcPositioningFake) << "Starting updates";
 
-    connect(&this->m_slave, &QSerialPort::readyRead, this, &QGeoPositionInfoSourceFake::handleNewLocation);
+    connect(&this->m_socket, &QTcpSocket::readyRead, this, &QGeoPositionInfoSourceFake::handleNewLocation);
 }
 
 void QGeoPositionInfoSourceFake::stopUpdates()
 {
-    if(!this->m_slave.isOpen())
-    {
-        qCDebug(lcPositioningFake) << "The slave port is already closed";
-        return;
-    }
-
-    this->m_slave.close();
+    this->m_socket.disconnectFromHost();
 
     qCDebug(lcPositioningFake) << "Stopping updates";
 
-    disconnect(&this->m_slave, &QSerialPort::readyRead, this, &QGeoPositionInfoSourceFake::handleNewLocation);
+    disconnect(&this->m_socket, &QTcpSocket::readyRead, this, &QGeoPositionInfoSourceFake::handleNewLocation);
 }
 
 void QGeoPositionInfoSourceFake::requestUpdate(int timeout)
 {
     emit positionUpdated(this->m_lastPosition);
-}
-
-void QGeoPositionInfoSourceFake::setPort(QString const& port)
-{
-    qCDebug(lcPositioningFake) << "setPort" << port;
-    this->m_slave.setPortName(port);
-    qCDebug(lcPositioningFake) << "port" << this->m_slave.portName();
 }
 
 void QGeoPositionInfoSourceFake::setError(QGeoPositionInfoSource::Error error)
@@ -104,7 +91,7 @@ void QGeoPositionInfoSourceFake::setError(QGeoPositionInfoSource::Error error)
 
 void QGeoPositionInfoSourceFake::handleNewLocation()
 {
-    QString data = this->m_slave.readAll();
+    QString data = this->m_socket.readAll();
     qCDebug(lcPositioningFake) << "Received: " << data;
     QStringList c = data.split('|');
 

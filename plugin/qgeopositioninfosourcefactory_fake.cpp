@@ -29,10 +29,14 @@ QGeoPositionInfoSource* QGeoPositionInfoSourceFactoryFake::positionInfoSourceWit
 
     auto source = new QGeoPositionInfoSourceFake(parent);
 
-    if(parameters.find("portname") == parameters.cend())
+    if(parameters.find("host") == parameters.cend())
         return nullptr;
 
-    source->setPort(parameters.find("portname").value().toString());
+    if(parameters.find("port") == parameters.cend())
+        return nullptr;
+
+    source->setHost(parameters.find("host").value().toString());
+    source->setPort(parameters.find("port").value().toUInt());
 
     return source;
 }

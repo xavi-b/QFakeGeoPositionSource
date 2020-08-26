@@ -3,8 +3,7 @@
 
 #include <QtPositioning/QGeoPositionInfoSource>
 #include <QtCore/QPointer>
-#include <QtSerialPort/QSerialPort>
-#include <QtSerialPort/QSerialPortInfo>
+#include <QtNetwork/QTcpSocket>
 
 class QGeoPositionInfoSourceFake : public QGeoPositionInfoSource
 {
@@ -27,13 +26,16 @@ public:
     void stopUpdates() override;
     void requestUpdate(int timeout = 5000) override;
 
-    void setPort(QString const& port);
+    void setHost(QString const& host) { this->host = host; }
+    void setPort(quint16 port) { this->port = port; }
 
 private:
     void setError(QGeoPositionInfoSource::Error error);
     void handleNewLocation();
 
-    QSerialPort m_slave;
+    QString host;
+    quint16 port;
+    QTcpSocket m_socket;
     QGeoPositionInfoSource::Error m_error = NoError;
     QGeoPositionInfo m_lastPosition;
 };

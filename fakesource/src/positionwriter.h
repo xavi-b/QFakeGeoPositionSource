@@ -1,21 +1,21 @@
 #ifndef POSITIONWRITER_H
 #define POSITIONWRITER_H
 
-#include <QSerialPort>
 #include <QDebug>
 #include <QThread>
+#include <QTcpServer>
+#include <QTcpSocket>
 
 class PositionWriter : public QObject
 {
     Q_OBJECT
 private:
-    QSerialPort serial;
-    QString device;
+    QTcpServer server;
+    std::vector<QTcpSocket*> clients;
 
 public:
     PositionWriter(QObject* parent = nullptr);
-
-    QString getDevice() const { return this->device; }
+    ~PositionWriter();
 
 public slots:
     void writeCoordinates(double lat, double lon);

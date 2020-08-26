@@ -1,7 +1,7 @@
 TEMPLATE        = app
 CONFIG         += c++17
 DEFINES        += QT_DEPRECATED_WARNINGS
-QT             += serialport qml quick positioning location
+QT             += network qml quick positioning location
 TARGET          = $$PWD/../run_fakesource
 
 SUBDIRS += \
