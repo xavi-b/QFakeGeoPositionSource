@@ -9,7 +9,8 @@ ApplicationWindow {
     height: 640
     visible: true
 
-    property var portname: "/dev/pts/2"
+    property var port: 50000
+    property var host: "localhost"
 
     PositionSource {
         id: src
@@ -17,7 +18,8 @@ ApplicationWindow {
         active: false
         name: "fake"
 
-        PluginParameter { name: "portname"; value: portname }
+        PluginParameter { name: "port"; value: port }
+        PluginParameter { name: "host"; value: host }
 
         Component.onCompleted: {
             console.log("PositionSource ready");
