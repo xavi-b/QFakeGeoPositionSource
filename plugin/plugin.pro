@@ -2,6 +2,11 @@ TARGET = $$PWD/../qtposition_fake
 
 QT = core positioning network
 
+unix {
+target.path = /usr/lib/qt/plugins/position/
+INSTALLS += target
+}
+
 HEADERS += \
     qgeopositioninfosource_fake_p.h \
     qgeopositioninfosourcefactory_fake.h
