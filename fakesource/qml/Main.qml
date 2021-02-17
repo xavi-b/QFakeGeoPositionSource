@@ -9,8 +9,23 @@ ApplicationWindow {
     height: 640
     visible: true
 
-    function formatTime(sec)
-    {
+    function toggle() {
+        console.log("toggle");
+        if(timer.running) {
+            timer.stop();
+            timer.modelIndex = 0;
+            timer.pathIndex = 0;
+        } else {
+            currentCoordinates = startCoordinates;
+            routeQuery.clearWaypoints();
+            routeQuery.addWaypoint(startCoordinates);
+            routeQuery.addWaypoint(endCoordinates);
+            routeModel.update();
+            map.fitViewportToMapItems();
+        }
+    }
+
+    function formatTime(sec) {
         var value = sec
         var seconds = value % 60
         value /= 60
@@ -24,8 +39,7 @@ ApplicationWindow {
         return value
     }
 
-    function formatDistance(meters)
-    {
+    function formatDistance(meters) {
         var dist = Math.round(meters)
         if (dist > 1000 ){
             if (dist > 100000){
@@ -64,20 +78,7 @@ ApplicationWindow {
                 id: startBtn
                 anchors.left: parent.left
                 text: timer.running ? "Stop" : "Start"
-                onClicked: {
-                    if(timer.running) {
-                        timer.stop();
-                        timer.modelIndex = 0;
-                        timer.pathIndex = 0;
-                    } else {
-                        currentCoordinates = startCoordinates;
-                        routeQuery.clearWaypoints();
-                        routeQuery.addWaypoint(startCoordinates);
-                        routeQuery.addWaypoint(endCoordinates);
-                        routeModel.update();
-                        map.fitViewportToMapItems();
-                    }
-                }
+                onClicked: toggle();
             }
         }
 
@@ -145,7 +146,10 @@ ApplicationWindow {
 
             RouteModel {
                 id: routeModel
-                plugin: mapPlugin
+                plugin: Plugin {
+                    name: "mapbox"
+                    PluginParameter { name: "mapbox.access_token"; value: "pk.eyJ1IjoieGF2aS1iIiwiYSI6ImNrZTc3cHR5NDFrZmQyem80Zm55NTlrcHkifQ.UlKCHnBI7IjY86s1hq22sQ" }
+                }
                 query: routeQuery
                 autoUpdate: false
                 onStatusChanged: {
